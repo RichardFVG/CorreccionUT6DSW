@@ -1,58 +1,79 @@
 <?php
 // controllers/VotosController.php
 
-// 1. Incluyo el modelo Voto para poder gestionar la lógica de valoraciones
 require_once __DIR__ . '/../models/Voto.php';
 
-// 2. Defino la clase VotosController
 class VotosController {
-    // 3. Declaro la propiedad para el 
-    // modelo de Votos
     private $votoModel;
 
-    // 4. En el constructor instancio el 
-    // modelo Voto
     public function __construct() {
         $this->votoModel = new Voto();
     }
 
-    // 5. Método para guardar los votos en 
-    // la base de datos
+    // Guarda el voto por primera vez.
     public function store() {
         session_start();
-        // 6. Verifico que el usuario esté 
-        // logueado
         if (!isset($_SESSION['usuario'])) {
-            echo json_encode(
-                ["ok" => false, "msg" => "No estás logueado"]
-            );
+            echo json_encode(["ok" => false, "msg" => "No estás logueado"]);
             return;
         }
 
-        // 7. Capturo los datos del formulario 
-        // (id de producto, cantidad)
         $idUs = $_SESSION['usuario'];
         $idPr = $_POST['idPr'];
         $cantidad = $_POST['cantidad'];
 
-        // 8. Llamo al método votar del modelo
-        $exito = 
-        $this->votoModel->votar(
-            $idUs, $idPr, $cantidad
-        );
+        $exito = $this->votoModel->votar($idUs, $idPr, $cantidad);
 
-        // 9. Respondo en JSON indicando si el 
-        // voto fue guardado o ya existía
         if (!$exito) {
-            echo json_encode(
-                ["ok" => false, "msg" => "Ya has valorado este producto"]
-            );
-        } 
-        
-        else {
-            echo json_encode(
-                ["ok" => true, "msg" => "Valoración guardada con éxito"]
-            );
+            echo json_encode(["ok" => false, "msg" => "Ya has valorado este producto"]);
+        } else {
+            echo json_encode(["ok" => true, "msg" => "Valoración guardada con éxito"]);
         }
+    }
+
+    /**
+     * Método para editar/actualizar la valoración de un producto concreto.
+     * Sustituyendo la lógica de "sumar" o "restar" por un "asignar nuevo valor".
+     */
+    public function updateRating() {
+        session_start();
+        if (!isset($_SESSION['usuario'])) {
+            // Si no hay sesión, redirigimos a login
+            header("Location: ../../public/index.php?controller=Login&action=login");
+            exit;
+        }
+
+        $idUs = $_SESSION['usuario'];
+        // Vienen por POST:
+        $idPr = $_POST['idPr'] ?? null;
+        $nuevoValor = $_POST['cantidad'] ?? null;  // AHORA esto será el valor "directo"
+        $modo = $_POST['modo'] ?? null; // Si quieres, puedes ignorar modo o directamente quitarlo
+
+        if (!$idPr || !$nuevoValor) {
+            echo "<p style='color:red;'>Faltan datos de 'idPr' o 'cantidad'.</p>";
+            return;
+        }
+
+        // Verificar si ya existía un voto anterior
+        $existeVoto = $this->votoModel->getVoto($idUs, $idPr);
+
+        // Asegurar que está dentro de 1..5
+        $nuevoRating = (int)$nuevoValor;
+        if ($nuevoRating < 1) {
+            $nuevoRating = 1;
+        } elseif ($nuevoRating > 5) {
+            $nuevoRating = 5;
+        }
+
+        // Si existía voto, lo actualizamos. Si no, lo insertamos.
+        if ($existeVoto) {
+            $this->votoModel->updateVoto($idUs, $idPr, $nuevoRating);
+        } else {
+            $this->votoModel->votar($idUs, $idPr, $nuevoRating);
+        }
+
+        // Redirigimos al listado de productos para que se vea la nueva media
+        header("Location: ../../public/index.php?controller=Productos&action=listar");
+        exit;
     }
 }
