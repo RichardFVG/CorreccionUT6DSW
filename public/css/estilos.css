@@ -1,0 +1,176 @@
+body {
+    margin: 0;
+    padding: 40px 100px 40px 100px;
+    background-color: #00C8A5;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+/* 1. Ajusto el margen superior de la 
+sección main */
+main {
+    margin-top: 0px;
+}
+
+.titulo1 {
+    margin-top: 0px;
+    text-decoration: underline;
+}
+
+.titulo2 {
+    margin-top: 0px;
+    color: #333;
+}
+
+form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+/* 2. Ajusto inputs y áreas de texto 
+para ocupar todo el ancho */
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #0021F3;
+    color: aqua;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+/* 3. Cambio de color al hacer hover 
+en el botón */
+button:hover {
+    background-color: #990000;
+    color: aqua;
+}
+
+/* 4. Estilos para las tablas, con ancho 
+completo y bordes colapsados */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    vertical-align: middle;
+    box-sizing: border-box;
+}
+
+th {
+    background-color: #fff;
+}
+
+/* 5. Estilo para enlaces dentro de las 
+tablas */
+table a {
+    margin-right: 5px;
+    color: #333;
+    text-decoration: none;
+}
+
+table a:hover {
+    text-decoration: underline;
+}
+
+/* 6. Enlaces del menú de navegación */
+nav a {
+    margin-right: 10px;
+    color: #fff;
+    text-decoration: none;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+footer {
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* 7. Reglas responsive: ajusto diseño 
+en pantallas pequeñas */
+@media (max-width: 600px) {
+    /* 8. Disminuyo el padding del 
+    body */
+    body {
+        padding: 5px 10px 5px 10px;
+    }
+
+    /* 9. Ajusto el padding del formulario */
+    form {
+        padding: 15px;
+    }
+
+    /* 10. Aumento un poco el tamaño de 
+    fuente en el botón */
+    button {
+        font-size: 16px;
+        padding: 12px;
+    }
+
+    /* 11. Permito scroll horizontal en la 
+    tabla si es muy ancha */
+    table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+/* 12. Centra y define tamaño del contenedor 
+de login */
+.login-container {
+    width: 350px;            
+    min-height: 350px;       
+    margin: 0 auto;           
+    position: relative;       
+}
+
+/* 13. Clase tooltip para el ícono ( ! ) */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;      
+    cursor: pointer;
+}
+
+/* 14. Texto del tooltip, inicialmente 
+oculto */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 180px;
+    background-color: #555;
+    color: #fff;
+    text-align: left;
+    padding: 5px;
+    border-radius: 6px;
+    
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: -190px;  
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
